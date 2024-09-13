@@ -29,7 +29,7 @@ public class OdontologoService {
         // Verifica si el odontólogo tiene pacientes asignados
         List<Paciente> pacientes = pacienteRepository.findByOdontologoId(id);
         if (!pacientes.isEmpty()) {
-            throw new BadRequestException("No se puede eliminar el odontólogo, tiene pacientes asignados.");
+            throw new BadRequestException("No se puede eliminar un odontólogo si tiene pacientes asignados");
         }
 
         // Si no tiene pacientes, el odontólogo puede ser eliminado
