@@ -35,10 +35,15 @@ public class WebConfigSecurity {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests((authz)->authz
+                        //USER y ADMIN pueden acceder a la página de inicio
                         .requestMatchers("/", "/index.html").hasAnyRole("USER", "ADMIN")
-                        .requestMatchers("/get_turnos.html", "/turno/**").hasAnyRole("USER", "ADMIN")  // USER y ADMIN pueden listar turnos
-                        .requestMatchers("/post_turnos.html").hasRole("ADMIN")  // Solo ADMIN puede guardar turnos
+                        //USER y ADMIN pueden gestionar turnos
+                        .requestMatchers("/get_turnos.html", "/post_turnos.html", "/turno/**").hasAnyRole("USER", "ADMIN")
+                        //USER y ADMIN acceder a archivos estáticos
                         .requestMatchers("/js/**", "/css/**", "/img/**").permitAll()
+                        //ADMIN controla la gestión de pacientes y odontólogos
+                        .requestMatchers("/get_pacientes.html", "/post_pacientes.html", "/get_odontologos.html", "/post_odontologos.html").hasRole("ADMIN")
+                        //Cualquier ruta será accedida por el ADMIN
                         .requestMatchers("/**").hasRole("ADMIN")
                         .anyRequest().authenticated())
                 .formLogin(withDefaults())
