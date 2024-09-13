@@ -35,8 +35,10 @@ public class WebConfigSecurity {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests((authz)->authz
-                        .requestMatchers("/", "/index.html").hasAnyRole("USER","ADMIN")
-                        .requestMatchers("/turno.html").hasRole("USER")
+                        .requestMatchers("/", "/index.html").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers("/get_turnos.html", "/turno/**").hasAnyRole("USER", "ADMIN")  // USER y ADMIN pueden listar turnos
+                        .requestMatchers("/post_turnos.html").hasRole("ADMIN")  // Solo ADMIN puede guardar turnos
+                        .requestMatchers("/js/**", "/css/**", "/img/**").permitAll()
                         .requestMatchers("/**").hasRole("ADMIN")
                         .anyRequest().authenticated())
                 .formLogin(withDefaults())
